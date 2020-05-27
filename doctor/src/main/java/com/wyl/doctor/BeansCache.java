@@ -16,7 +16,7 @@ public class BeansCache {
     private static final ReentrantLock lock = new ReentrantLock();
     private static final Condition full = lock.newCondition();
 
-    private static final int MAX_NUM = 50;//缓存的数量
+    private static final int MAX_NUM = 5;//缓存的数量
     private static ArrayList<Serializable> beans = new ArrayList<>(MAX_NUM);
     private static volatile boolean init = false;//是否初始化了
 
@@ -24,6 +24,7 @@ public class BeansCache {
         if (init) {
             return;
         }
+        //准备好写入到磁盘的任务
         startSaveToFile();
         init = true;
     }
@@ -68,7 +69,7 @@ public class BeansCache {
     }
 
     /**
-     * 保存到磁盘
+     * 将缓存中的数据保存到磁盘
      */
     private static void startSaveToFile() {
         ThreadHelper.getInstance().submit(new GetBeansTask(lock, full));

@@ -4,49 +4,37 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.wyl.doctor.BeansCache;
 import com.wyl.doctor.MethodBean;
+import com.wyl.doctor.method.MethodRecordUtil;
 
 public class MainActivity extends AppCompatActivity {
+    private int count = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BeansCache.init();
 
-        new Thread(new Runnable() {
+        findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-               while (true) {
-                   Log.d("wyl", "任务1开始提供数据");
-                   for (int i = 0; i < 30; i++) {
-                       BeansCache.put(new MethodBean());
-                   }
-                   try {
-                       Thread.sleep(1000);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-               }
+            public void onClick(View v) {
+                count++;
+                test1("时间：" + System.currentTimeMillis(), count);
             }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-               while (true) {
-                   Log.d("wyl", "任务2开始提供数据");
-                   for (int i = 0; i < 10; i++) {
-                       BeansCache.put(new MethodBean());
-                   }
-                   try {
-                       Thread.sleep(800);
-                   } catch (InterruptedException e) {
-                       e.printStackTrace();
-                   }
-               }
-            }
-        }).start();
+        });
+
+    }
+
+    private void test1(String name, int age) {
+        Object[] args = new Object[]{name, age};
+        MethodRecordUtil.onStart(this.getClass(), "test1", args);
+        for (int i = 0; i < 1000; i++) {
+            i++;
+        }
+
+        MethodRecordUtil.onEnd();
     }
 }
