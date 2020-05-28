@@ -97,13 +97,11 @@ public class FileUtils {
         return t;
     }
 
-    public static boolean writeToFile(String path, Serializable obj) {
+    public static boolean writeToFile(File targetFile, Serializable obj) {
         boolean result = false;
-        if (obj == null || TextUtils.isEmpty(path)) {
+        if (targetFile == null) {
             return result;
         }
-
-        File targetFile = new File(path);
         if (!targetFile.exists()) {
             try {
                 targetFile.createNewFile();
@@ -152,5 +150,13 @@ public class FileUtils {
         return true;
 
     }
+
+    public static boolean writeToFile(String path, Serializable obj) {
+        if (TextUtils.isEmpty(path)) {
+            return false;
+        }
+        return writeToFile(new File(path), obj);
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.wyl.doctor;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,9 +12,9 @@ import java.util.List;
  * desc   : 写入到文件的task
  */
 public class WriteToFileTask implements Runnable{
-    private List<Serializable> beans;
+    private ArrayList<Serializable> beans;
 
-    public WriteToFileTask(List<Serializable> beans) {
+    public WriteToFileTask(ArrayList<Serializable> beans) {
         this.beans = beans;
     }
 
