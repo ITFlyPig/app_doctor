@@ -6,4 +6,13 @@ package com.wyl.doctor;
  * 描述     ：
  */
 public class AppDoctor {
+    private static String logDirPath;//日志文件的存储目录
+
+    public static void init(String logDirPath) {
+        AppDoctor.logDirPath = logDirPath;
+    }
+
+    public static String getLogDirPath() {
+        return logDirPath;
+    }
 }

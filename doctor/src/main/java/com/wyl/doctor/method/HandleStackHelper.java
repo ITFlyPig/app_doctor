@@ -3,6 +3,7 @@ package com.wyl.doctor.method;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,6 +16,7 @@ import com.wyl.doctor.MethodBean;
  * 描述     ：栈处理线程，主要是负责压栈和出栈，尽最大力减轻主线程的负担
  */
 public class HandleStackHelper {
+    public static final String TAG = HandleStackHelper.class.getName();
     private HandlerThread mHandlerThread;
     private Handler mHandler;
     private static final int MSG_PUSH = 1;//压栈
@@ -41,7 +43,7 @@ public class HandleStackHelper {
         switch (msg.what) {
             case MSG_POP:
                 if (msg.obj instanceof Long) {
-                    long threadId = msg.what;
+                    long threadId = (long) msg.obj;
                     //得到一个方法的调用信息
                     MethodBean bean = MethodRecordStack.getInstance().pop(threadId);
                     //将其放到内存缓存中
@@ -51,6 +53,7 @@ public class HandleStackHelper {
                 break;
             case MSG_PUSH:
                 if (msg.obj instanceof MethodBean) {
+
                     MethodBean bean = (MethodBean) msg.obj;
                     MethodRecordStack.getInstance().push(bean);
                 }

@@ -21,15 +21,12 @@ public class WriteToFileTask implements Runnable{
     @Override
     public void run() {
         Log.d("wyl", "WriteToFileTask 开始写入任务");
-        try {
-            if (beans != null) {
-                for (Serializable bean : beans) {
-                    Log.d("wyl", "开始写的bean：" + bean.toString());
-                }
+        if (beans != null) {
+            for (Serializable bean : beans) {
+                Log.d("wyl", "开始写的bean：" + bean.toString());
+                LogManager.instance().writeToLog(bean);
+                Log.d("tttttttttt", "WriteToFileTask--run: 写入到文件 "  + Thread.currentThread().getName());
             }
-            Thread.sleep(4);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         Log.d("wyl", "WriteToFileTask 写入任务完成");
     }

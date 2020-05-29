@@ -1,6 +1,7 @@
 package com.wyl.doctor;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.wyl.doctor.utils.LogUtil;
 
@@ -23,7 +24,8 @@ public class FileManager {
     private String dir;
     private ArrayList<File> writeableFiles;//可写入的文件集合，包括：新建文件、写了部分容量的文件
     private ArrayList<File> waitUploadFiles;//等待上传的文件集合
-    private int oneFileMaxSize = 5 * 1024 * 1024; //单个文件最大的size 5M
+//    private int oneFileMaxSize = 5 * 1024 * 1024; //单个文件最大的size 5M
+    private int oneFileMaxSize = 10 * 1024; //单个文件最大的size 测试  写成1kb
     private int maxNum = 10;//最大文件数量
 
     public FileManager(String dir) {
@@ -171,13 +173,14 @@ public class FileManager {
      * @return
      */
     public List<File> findUploadFiles() {
-        return writeableFiles;
+        return waitUploadFiles;
     }
 
     /**
      * 重置可上传文件集合
      */
     public void resetUploadSet() {
+        Log.d(TAG, "FileManager--resetUploadSet: 重置待上传集合");
         waitUploadFiles = new ArrayList<>();
     }
 
@@ -217,12 +220,14 @@ public class FileManager {
             return;
         }
         //开始写入
+        Log.d(TAG, "writeToFile: 开始写入，此时文件的大小：" + logFile.length());
         FileUtils.writeToFile(logFile, obj);
-
+        Log.d(TAG, "writeToFile: 写入完成，此时文件的大小：" + logFile.length() + " 可写入集合的大小：" + writeableFiles.size());
         //检查是否达到上传的大小，达到的放到可上传的集合里
         if(logFile.length() >= oneFileMaxSize) {
             remove(logFile.getAbsolutePath(), writeableFiles);
             waitUploadFiles.add(logFile);
+            Log.d(TAG, "writeToFile: 单文件大小达到要求，将文件添加到等待上传集合waitUploadFiles：");
         }
     }
 

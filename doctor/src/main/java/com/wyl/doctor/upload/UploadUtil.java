@@ -1,5 +1,7 @@
 package com.wyl.doctor.upload;
 
+import android.util.Log;
+
 import com.wyl.doctor.ThreadHelper;
 import com.wyl.doctor.UploadFileTask;
 
@@ -12,6 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 描述     ：上传工具类
  */
 public class UploadUtil {
+    public static final String TAG = UploadUtil.class.getName();
     //目前只提供了okhttp的上传实现
     private static IUpload iUpload = new OkHttpUpload();//上传器
     private static LinkedBlockingQueue<File> uploadQueue = new LinkedBlockingQueue<>();//待上传文件的容器
@@ -23,6 +26,7 @@ public class UploadUtil {
      * @param file
      */
     public static void uploadAsync(File file) {
+        Log.d(TAG, "uploadAsync: 异步上传文件");
 
         if (file == null) {
             return;
@@ -32,6 +36,7 @@ public class UploadUtil {
             isStartUploadTask = true;
             startUploadTask();
         }
+        Log.d("tttttttttt", "UploadUtil--uploadAsync: 添加到文件上传队列，线程： " + Thread.currentThread().getName());
         uploadQueue.offer(file);
     }
 
@@ -46,7 +51,7 @@ public class UploadUtil {
      * 同步上传
      * @param file
      */
-    public static void upload(File file){
+    private static void upload(File file){
         if (file == null) return;
         new UploadFileTask(file, iUpload).run();
     }
@@ -55,6 +60,7 @@ public class UploadUtil {
      * 开启上传文件的任务
      */
     private static void startUploadTask() {
+        Log.d(TAG, "startUploadTask: 开启文件上传任务");
         ThreadHelper.getInstance().submit(new Runnable() {
             @Override
             public void run() {
@@ -62,8 +68,10 @@ public class UploadUtil {
                     try {
                         //获得文件
                         File file = uploadQueue.take();
+                        Log.d(TAG, "startUploadTask  获得文件");
                         //上传
                         upload(file);
+                        Log.d("tttttttttt", "UploadUtil--run: 文件上传成功，线程： " + Thread.currentThread().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

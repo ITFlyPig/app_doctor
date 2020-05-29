@@ -13,10 +13,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * desc   : 用于在内存中暂存bean，避免磁盘的频繁写入
  */
 public class BeansCache {
+    public static final String TAG = BeansCache.class.getName();
     private static final ReentrantLock lock = new ReentrantLock();
     private static final Condition full = lock.newCondition();
 
-    private static final int MAX_NUM = 5;//缓存的数量
+    private static final int MAX_NUM = 10;//缓存的数量
     private static ArrayList<Serializable> beans = new ArrayList<>(MAX_NUM);
     private static volatile boolean init = false;//是否初始化了
 
@@ -38,16 +39,17 @@ public class BeansCache {
         if (bean == null) {
             return;
         }
+        Log.d("tttttttttt", "BeansCache--put: 放到cache中，线程： " + Thread.currentThread().getName());
         lock.lock();
         try {
             beans.add(bean);
             int size = beans.size();
 
             if (size >= MAX_NUM) {
-                Log.d("wyl", "数据已满");
                 full.signal();
+                Log.d(TAG, "BeansCache--put: 集合满了，通知线程取出去写到文件");
             } else {
-                Log.d("wyl", "数据未满");
+                Log.d(TAG, "BeansCache--put: 集合还未满");
             }
         } finally {
             lock.unlock();

@@ -21,7 +21,7 @@ public class ThreadHelper {
         return threadHelper;
     }
 
-    private ExecutorService executor = Executors.newFixedThreadPool(2);
+    private ExecutorService executor = Executors.newFixedThreadPool(3);
 
     public void submit(Runnable task) {
         executor.submit(task);

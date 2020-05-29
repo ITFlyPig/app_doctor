@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.wyl.doctor.AppDoctor;
 import com.wyl.doctor.BeansCache;
 import com.wyl.doctor.MethodBean;
 import com.wyl.doctor.ThreadHelper;
@@ -22,12 +23,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AppDoctor.init(getFilesDir().getAbsolutePath() + File.separator + "logs");
+
         findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                count++;
 //                test1("时间：" + System.currentTimeMillis(), count);
-                uploadTest();
+//                uploadTest();
+                makeMethodTest();
             }
         });
 
@@ -50,5 +54,21 @@ public class MainActivity extends AppCompatActivity {
                 OkhttpHelper.instance().uploadFile("http://localhost:8080/doctor/upload/save", new File("/sdcard/Jessica_Alba.zip"));
             }
         });
+    }
+
+    private void makeMethodTest() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 100000; i++) {
+                    test1("name:" + i , 1);
+//                    try {
+//                        Thread.sleep(500);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+                }
+            }
+        }).start();
     }
 }

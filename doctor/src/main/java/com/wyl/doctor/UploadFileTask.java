@@ -24,7 +24,6 @@ public class UploadFileTask implements Runnable {
         if (file == null || iUpload == null) return;
 
         if (iUpload.upload(file)) {
-
             //上传成功，删除文件
             file.delete();
         }

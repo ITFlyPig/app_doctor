@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 
 /**
  * author : wangyuelin
@@ -116,31 +117,34 @@ public class FileUtils {
         if (len == 0) {
             return result;
         }
+        ByteBuffer buffer = ByteBuffer.allocate(4 + len);
+        buffer.putInt(len);//写入长度
+        buffer.put(buf);//写数据
+
         //写入到文件
         FileOutputStream fos = null;
         BufferedOutputStream bos = null;
         try {
-            fos = new FileOutputStream(targetFile);
+            fos = new FileOutputStream(targetFile, true);
             bos = new BufferedOutputStream(fos);
-            //先写入长度
-            bos.write(len);
-            //写入对象数据
-            bos.write(buf);
+            //将数据写入到文件
+            bos.write(buffer.array());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (fos != null) {
+            if (bos != null) {
                 try {
-                    fos.close();
+                    bos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (bos != null) {
+
+            if (fos != null) {
                 try {
-                    bos.close();
+                    fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

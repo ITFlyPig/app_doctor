@@ -39,6 +39,7 @@ public class GetBeansTask implements Runnable {
             } finally {
                 takeLock.unlock();
             }
+            Log.d("tttttttttt", "GetBeansTask--run: 从cache中打包取出来放到写入文件的任务中，线程： " + Thread.currentThread().getName());
             //开始写入到文件
             Log.d("wyl", "GetBeansTask 开始提交写入的任务");
             ThreadHelper.getInstance().submit(new WriteToFileTask(beans));

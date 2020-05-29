@@ -1,13 +1,11 @@
 package com.wyl.doctor;
 
-import android.text.TextUtils;
+import android.util.Log;
 
-import com.wyl.doctor.utils.LogUtil;
+import com.wyl.doctor.upload.UploadUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +17,7 @@ import java.util.List;
 public class LogManager {
     private static final String TAG = LogManager.class.getName();
     private String logDir;//log文件的存储目录
-    private int maxNum = 10;//最大文件数量
+    private int maxNum = 2;//最大文件数量
     private FileManager fileManager;//用于屏蔽具体文件的管理
 
     public LogManager(String logDir, int maxNum) {
@@ -28,21 +26,34 @@ public class LogManager {
         fileManager = new FileManager(logDir);
     }
 
+    private static LogManager logManager = Holder.logManager;
+    private static class Holder {
+        private static LogManager logManager = new LogManager(AppDoctor.getLogDirPath(), 3);//测试 3个文件就开始传
+    }
+    public static LogManager instance() {
+        return logManager;
+    }
+
     /**
      * 将数据写到文件
      * @param obj
      */
-    public void writeToLog(Serializable obj) {
+    public synchronized void  writeToLog(Serializable obj) {
+        Log.d(TAG, "writeToLog: 将对象写入到文件");
         if (obj == null) return;
         //写到文件
         fileManager.writeToFile(obj);
         //检查是否上传
         List<File> files = fileManager.findUploadFiles();
+        Log.d(TAG, "writeToLog: bean写入后，待上传文件数量：" + files.size());
+
         if (files.size() >= maxNum) {
             //重置可上传集合
             fileManager.resetUploadSet();
-            //添加上传文件的任务
-
+            //将文件添加到队列，等待上传
+            for (File file : files) {
+                UploadUtil.uploadAsync(file);
+            }
         }
     }
 

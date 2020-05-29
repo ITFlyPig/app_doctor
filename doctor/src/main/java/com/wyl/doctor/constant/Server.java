@@ -1,4 +1,4 @@
-package com.wyl.doctor.utils;
+package com.wyl.doctor.constant;
 
 /**
  * 创建人   ：yuelinwang
