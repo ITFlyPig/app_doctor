@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.wyl.doctor.bean.BaseLogBean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,7 +43,7 @@ public class GetBeansTask implements Runnable {
             Log.d("tttttttttt", "GetBeansTask--run: 从cache中打包取出来放到写入文件的任务中，线程： " + Thread.currentThread().getName());
             //开始写入到文件
             Log.d("wyl", "GetBeansTask 开始提交写入的任务");
-            ThreadHelper.getInstance().submit(new WriteToFileTask(beans));
+            ThreadHelper.getInstance().submit(new WriteTask(beans));
         }
     }
 }

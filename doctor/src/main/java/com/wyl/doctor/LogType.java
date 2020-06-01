@@ -10,5 +10,5 @@ public interface LogType {
     int NET_LOG = 2;//网络日志
     int CPU_LOG = 3;//cpu日志
     int MEM_LOG = 4;//内存日志
-    int ALL_PATH = 5;//所有路劲日志，只是为了排查问题
+    int ALL_PATH = 5;//所有路劲日志，只是为了排查问题，调试模式有效
 }

@@ -13,10 +13,10 @@ import java.util.ArrayList;
  * time   : 2020/5/9 5:53 PM
  * desc   : 写入到文件的task
  */
-public class WriteToFileTask implements Runnable{
+public class WriteTask implements Runnable{
     private ArrayList<BaseLogBean> beans;
 
-    public WriteToFileTask(ArrayList<BaseLogBean> beans) {
+    public WriteTask(ArrayList<BaseLogBean> beans) {
         this.beans = beans;
     }
 

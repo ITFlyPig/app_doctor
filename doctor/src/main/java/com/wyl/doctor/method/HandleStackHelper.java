@@ -8,7 +8,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.wyl.doctor.BeansCache;
+import com.wyl.doctor.LogType;
 import com.wyl.doctor.MethodBean;
+import com.wyl.doctor.upload.UploadBean;
+import com.wyl.doctor.upload.UploadUtil;
 
 /**
  * 创建人   ：yuelinwang
@@ -47,7 +50,14 @@ public class HandleStackHelper {
                     //得到一个方法的调用信息
                     MethodBean bean = MethodRecordStack.getInstance().pop(threadId);
                     //将其放到内存缓存中
-                    BeansCache.put(bean);
+                    if (bean.type == LogType.ALL_PATH) {
+                        //直接使用socket传输的日志
+                        UploadUtil.socketUploadNow(new UploadBean(bean));
+                    } else {
+                        //需要写入到文件的日志
+                        BeansCache.put(bean);
+                    }
+
 
                 }
                 break;

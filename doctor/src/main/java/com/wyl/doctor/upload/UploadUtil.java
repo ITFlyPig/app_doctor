@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.wyl.doctor.ThreadHelper;
 import com.wyl.doctor.UploadFileTask;
+import com.wyl.doctor.upload.http.OkHttpUpload;
+import com.wyl.doctor.upload.socket.SocketUpload;
 
 import java.io.File;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -20,9 +22,11 @@ public class UploadUtil {
     private static LinkedBlockingQueue<UploadBean> uploadQueue = new LinkedBlockingQueue<>();//待上传文件的容器
     private static volatile boolean isStartUploadTask = false;//是否开启了上传的任务
     private static volatile boolean isStopUpload = false;//是否停止上传
+    private static IUpload socketUpload = new SocketUpload("", 0);
 
     /**
      * 异步上传，当队列中的文件超过Integer.MAX_VALUE时，要上传的文件直接被丢弃
+     *
      * @param uploadBean
      */
     public static void uploadAsync(UploadBean uploadBean) {
@@ -31,7 +35,7 @@ public class UploadUtil {
         if (uploadBean == null) {
             return;
         }
-        if(!isStartUploadTask) {
+        if (!isStartUploadTask) {
             //开启上传任务
             isStartUploadTask = true;
             startUploadTask();
@@ -49,9 +53,10 @@ public class UploadUtil {
 
     /**
      * 同步上传
+     *
      * @param uploadBean
      */
-    private static void upload(UploadBean uploadBean){
+    private static void upload(UploadBean uploadBean) {
         if (uploadBean == null) return;
         new UploadFileTask(uploadBean, iUpload).run();
     }
@@ -81,5 +86,15 @@ public class UploadUtil {
             }
         });
 
+    }
+
+    /**
+     * socket 立即传输
+     *
+     * @param bean
+     */
+    public static void socketUploadNow(UploadBean bean) {
+        if (bean == null) return;
+        socketUpload.upload(bean);
     }
 }

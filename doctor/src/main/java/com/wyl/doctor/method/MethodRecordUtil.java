@@ -1,5 +1,6 @@
 package com.wyl.doctor.method;
 
+import com.wyl.doctor.LogType;
 import com.wyl.doctor.MethodBean;
 
 /**
@@ -23,6 +24,7 @@ public class MethodRecordUtil {
 
         //记录方法的相关信息
         MethodBean methodBean = new MethodBean();
+        methodBean.type = LogType.ALL_PATH;
         //记录所属类
         methodBean.classFullName = cls.getName();
         //记录方法名称

@@ -81,11 +81,6 @@ public class LogManager {
                 keyPathLogManager.writeToFile(bytes);
                 handleUpload(cpuLogManager, type);
                 break;
-            case LogType.ALL_PATH:
-                //直接使用Socket传递到后台
-
-                break;
-
         }
 
     }

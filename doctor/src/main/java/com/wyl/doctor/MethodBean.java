@@ -4,6 +4,7 @@ import android.util.TimeUtils;
 
 import androidx.annotation.NonNull;
 
+import com.wyl.doctor.bean.BaseLogBean;
 import com.wyl.doctor.method.ThreadInfo;
 import com.wyl.doctor.utils.TimeUtil;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * time   : 2020/5/9 3:38 PM
  * desc   : 方法信息
  */
-public class MethodBean implements Serializable {
+public class MethodBean extends BaseLogBean implements Serializable {
     public String name;//方法名字
     public Object[] args;//方法的参数
     public String classFullName;//所属的类：全类名

@@ -1,12 +1,12 @@
-package com.wyl.doctor.upload;
+package com.wyl.doctor.upload.http;
 
 import android.util.Log;
 
 import com.wyl.doctor.constant.Server;
 import com.wyl.doctor.constant.Urls;
+import com.wyl.doctor.upload.IUpload;
+import com.wyl.doctor.upload.UploadBean;
 import com.wyl.doctor.utils.OkhttpHelper;
-
-import java.io.File;
 
 /**
  * 创建人   ：yuelinwang

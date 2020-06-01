@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppDoctor.init(getFilesDir().getAbsolutePath() + File.separator + "logs");
+        AppDoctor.init(getApplicationContext());
 
         findViewById(R.id.tv).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         ThreadHelper.getInstance().submit(new Runnable() {
             @Override
             public void run() {
-                OkhttpHelper.instance().uploadFile("http://localhost:8080/doctor/upload/save", new File("/sdcard/Jessica_Alba.zip"));
+//                OkhttpHelper.instance().uploadFile("http://localhost:8080/doctor/upload/save", new File("/sdcard/Jessica_Alba.zip"));
             }
         });
     }
