@@ -2,9 +2,11 @@ package com.wyl.doctor;
 
 import android.util.Log;
 
+import com.wyl.doctor.bean.BaseLogBean;
+import com.wyl.doctor.file.LogManager;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * author : wangyuelin
@@ -12,9 +14,9 @@ import java.util.List;
  * desc   : 写入到文件的task
  */
 public class WriteToFileTask implements Runnable{
-    private ArrayList<Serializable> beans;
+    private ArrayList<BaseLogBean> beans;
 
-    public WriteToFileTask(ArrayList<Serializable> beans) {
+    public WriteToFileTask(ArrayList<BaseLogBean> beans) {
         this.beans = beans;
     }
 
@@ -22,9 +24,9 @@ public class WriteToFileTask implements Runnable{
     public void run() {
         Log.d("wyl", "WriteToFileTask 开始写入任务");
         if (beans != null) {
-            for (Serializable bean : beans) {
+            for (BaseLogBean bean : beans) {
                 Log.d("wyl", "开始写的bean：" + bean.toString());
-                LogManager.instance().writeToLog(bean);
+                LogManager.instance().record(bean, bean.type);
                 Log.d("tttttttttt", "WriteToFileTask--run: 写入到文件 "  + Thread.currentThread().getName());
             }
         }

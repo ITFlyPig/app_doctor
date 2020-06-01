@@ -42,14 +42,16 @@ public class OkhttpHelper {
      * 上传文件
      * @param url
      * @param file
+     * @param type 文件类型
      */
-    public void uploadFile(String url, File file) {
+    public void uploadFile(String url, File file, int type) {
         if (TextUtils.isEmpty(url) || file == null) {
             return;
         }
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file))
+                .addFormDataPart("type", String.valueOf(type))
                 .build();
         Request request = new Request.Builder()
                 .url(url)

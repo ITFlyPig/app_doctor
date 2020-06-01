@@ -17,18 +17,18 @@ public class UploadUtil {
     public static final String TAG = UploadUtil.class.getName();
     //目前只提供了okhttp的上传实现
     private static IUpload iUpload = new OkHttpUpload();//上传器
-    private static LinkedBlockingQueue<File> uploadQueue = new LinkedBlockingQueue<>();//待上传文件的容器
+    private static LinkedBlockingQueue<UploadBean> uploadQueue = new LinkedBlockingQueue<>();//待上传文件的容器
     private static volatile boolean isStartUploadTask = false;//是否开启了上传的任务
     private static volatile boolean isStopUpload = false;//是否停止上传
 
     /**
      * 异步上传，当队列中的文件超过Integer.MAX_VALUE时，要上传的文件直接被丢弃
-     * @param file
+     * @param uploadBean
      */
-    public static void uploadAsync(File file) {
+    public static void uploadAsync(UploadBean uploadBean) {
         Log.d(TAG, "uploadAsync: 异步上传文件");
 
-        if (file == null) {
+        if (uploadBean == null) {
             return;
         }
         if(!isStartUploadTask) {
@@ -37,7 +37,7 @@ public class UploadUtil {
             startUploadTask();
         }
         Log.d("tttttttttt", "UploadUtil--uploadAsync: 添加到文件上传队列，线程： " + Thread.currentThread().getName());
-        uploadQueue.offer(file);
+        uploadQueue.offer(uploadBean);
     }
 
     /**
@@ -49,11 +49,11 @@ public class UploadUtil {
 
     /**
      * 同步上传
-     * @param file
+     * @param uploadBean
      */
-    private static void upload(File file){
-        if (file == null) return;
-        new UploadFileTask(file, iUpload).run();
+    private static void upload(UploadBean uploadBean){
+        if (uploadBean == null) return;
+        new UploadFileTask(uploadBean, iUpload).run();
     }
 
     /**
@@ -67,10 +67,11 @@ public class UploadUtil {
                 while (!isStopUpload) {
                     try {
                         //获得文件
-                        File file = uploadQueue.take();
+                        UploadBean uploadBean = uploadQueue.take();
+                        File file = uploadBean.file;
                         Log.d(TAG, "startUploadTask  获得文件");
                         //上传
-                        upload(file);
+                        upload(uploadBean);
                         Log.d("tttttttttt", "UploadUtil--run: 文件上传成功，线程： " + Thread.currentThread().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();

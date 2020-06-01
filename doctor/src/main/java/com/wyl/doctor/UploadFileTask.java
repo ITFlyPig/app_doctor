@@ -1,9 +1,9 @@
 package com.wyl.doctor;
 
-import com.wyl.doctor.upload.IUpload;
-import com.wyl.doctor.upload.UploadUtil;
+import android.util.Log;
 
-import java.io.File;
+import com.wyl.doctor.upload.IUpload;
+import com.wyl.doctor.upload.UploadBean;
 
 /**
  * 创建人   ：yuelinwang
@@ -11,21 +11,22 @@ import java.io.File;
  * 描述     ：上传文件的任务
  */
 public class UploadFileTask implements Runnable {
-    private File file;
+    public static final String TAG = UploadFileTask.class.getName();
+    private UploadBean uploadBean;
     private IUpload iUpload;
 
-    public UploadFileTask(File file, IUpload iUpload) {
-        this.file = file;
+    public UploadFileTask(UploadBean uploadBean, IUpload iUpload) {
+        this.uploadBean = uploadBean;
         this.iUpload = iUpload;
     }
 
     @Override
     public void run() {
-        if (file == null || iUpload == null) return;
-
-        if (iUpload.upload(file)) {
+        if (uploadBean == null || iUpload == null || uploadBean.file == null) return;
+        Log.d(TAG, "UploadFileTask--run: 开始上传文件：" + uploadBean.file.getAbsolutePath());
+        if (iUpload.upload(uploadBean)) {
             //上传成功，删除文件
-            file.delete();
+            uploadBean.file.delete();
         }
     }
 }

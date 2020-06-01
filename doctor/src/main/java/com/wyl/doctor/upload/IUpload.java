@@ -8,5 +8,5 @@ import java.io.File;
  * 描述     ： 文件上传接口
  */
 public interface IUpload {
-    boolean upload(File file);
+    boolean upload(UploadBean bean);
 }

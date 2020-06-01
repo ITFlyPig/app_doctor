@@ -17,9 +17,10 @@ public class OkHttpUpload implements IUpload {
     public static final String TAG = OkHttpUpload.class.getName();
 
     @Override
-    public boolean upload(File file) {
+    public boolean upload(UploadBean bean) {
+        if (bean == null || bean.file == null) return false;
         Log.d(TAG, "upload: 开始上传文件");
-        OkhttpHelper.instance().uploadFile(Server.host + Urls.UPLOAD_URL, file);
+        OkhttpHelper.instance().uploadFile(Server.host + Urls.UPLOAD_URL, bean.file, bean.type);
 //        try {
 //            Thread.sleep(5000);
 //        } catch (InterruptedException e) {

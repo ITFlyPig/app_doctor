@@ -2,6 +2,8 @@ package com.wyl.doctor;
 
 import android.util.Log;
 
+import com.wyl.doctor.bean.BaseLogBean;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -18,7 +20,7 @@ public class BeansCache {
     private static final Condition full = lock.newCondition();
 
     private static final int MAX_NUM = 10;//缓存的数量
-    private static ArrayList<Serializable> beans = new ArrayList<>(MAX_NUM);
+    private static ArrayList<BaseLogBean> beans = new ArrayList<>(MAX_NUM);
     private static volatile boolean init = false;//是否初始化了
 
     public static void init() {
@@ -35,7 +37,7 @@ public class BeansCache {
      *
      * @param bean
      */
-    public static void put(Serializable bean) {
+    public static void put(BaseLogBean bean) {
         if (bean == null) {
             return;
         }
@@ -61,11 +63,11 @@ public class BeansCache {
      *
      * @return
      */
-    public static ArrayList<Serializable> getFullCachedBeans() {
+    public static ArrayList<BaseLogBean> getFullCachedBeans() {
         if (beans.size() < MAX_NUM) {
             return null;
         }
-        ArrayList<Serializable> fullCache = beans;
+        ArrayList<BaseLogBean> fullCache = beans;
         beans = new ArrayList<>(MAX_NUM);
         return fullCache;
     }

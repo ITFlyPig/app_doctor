@@ -2,6 +2,8 @@ package com.wyl.doctor;
 
 import android.util.Log;
 
+import com.wyl.doctor.bean.BaseLogBean;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -25,7 +27,7 @@ public class GetBeansTask implements Runnable {
     public void run() {
         //具体的写入逻辑
         while (true) {
-            ArrayList<Serializable> beans = null;
+            ArrayList<BaseLogBean> beans = null;
             takeLock.lock();
             try {
                 beans = BeansCache.getFullCachedBeans();
