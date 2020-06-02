@@ -19,7 +19,7 @@ import com.wyl.doctor.upload.UploadUtil;
  * 描述     ：栈处理线程，主要是负责压栈和出栈，尽最大力减轻主线程的负担
  */
 public class HandleStackHelper {
-    public static final String TAG = HandleStackHelper.class.getName();
+    public static final String TAG = "wyl";
     private HandlerThread mHandlerThread;
     private Handler mHandler;
     private static final int MSG_PUSH = 1;//压栈
@@ -52,6 +52,7 @@ public class HandleStackHelper {
                     //将其放到内存缓存中
                     if (bean.type == LogType.ALL_PATH) {
                         //直接使用socket传输的日志
+                        Log.d(TAG, "HandleStackHelper--handle: 出栈，取到ALL_PATH类型的记录");
                         UploadUtil.socketUploadNow(new UploadBean(bean));
                     } else {
                         //需要写入到文件的日志

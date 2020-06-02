@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
 //                count++;
 //                test1("时间：" + System.currentTimeMillis(), count);
 //                uploadTest();
-                makeMethodTest();
+//                makeMethodTest();
+                test1("name:"  , 1);
             }
         });
 

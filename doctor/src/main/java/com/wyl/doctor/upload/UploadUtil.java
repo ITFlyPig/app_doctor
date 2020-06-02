@@ -16,13 +16,13 @@ import java.util.concurrent.LinkedBlockingQueue;
  * 描述     ：上传工具类
  */
 public class UploadUtil {
-    public static final String TAG = UploadUtil.class.getName();
+    public static final String TAG = "wyl";
     //目前只提供了okhttp的上传实现
     private static IUpload iUpload = new OkHttpUpload();//上传器
     private static LinkedBlockingQueue<UploadBean> uploadQueue = new LinkedBlockingQueue<>();//待上传文件的容器
     private static volatile boolean isStartUploadTask = false;//是否开启了上传的任务
     private static volatile boolean isStopUpload = false;//是否停止上传
-    private static IUpload socketUpload = new SocketUpload("", 0);
+    private static IUpload socketUpload = new SocketUpload("10.0.2.2", 8088);
 
     /**
      * 异步上传，当队列中的文件超过Integer.MAX_VALUE时，要上传的文件直接被丢弃
@@ -40,7 +40,7 @@ public class UploadUtil {
             isStartUploadTask = true;
             startUploadTask();
         }
-        Log.d("tttttttttt", "UploadUtil--uploadAsync: 添加到文件上传队列，线程： " + Thread.currentThread().getName());
+        Log.d(TAG, "UploadUtil--uploadAsync: 添加到文件上传队列，线程： " + Thread.currentThread().getName());
         uploadQueue.offer(uploadBean);
     }
 
@@ -77,7 +77,7 @@ public class UploadUtil {
                         Log.d(TAG, "startUploadTask  获得文件");
                         //上传
                         upload(uploadBean);
-                        Log.d("tttttttttt", "UploadUtil--run: 文件上传成功，线程： " + Thread.currentThread().getName());
+                        Log.d(TAG, "UploadUtil--run: 文件上传成功，线程： " + Thread.currentThread().getName());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -95,6 +95,7 @@ public class UploadUtil {
      */
     public static void socketUploadNow(UploadBean bean) {
         if (bean == null) return;
+        Log.d(TAG, "UploadUtil--socketUploadNow: 直接使用socket上传bean");
         socketUpload.upload(bean);
     }
 }

@@ -2,10 +2,13 @@ package com.wyl.doctor.upload.socket;
 
 import android.util.Log;
 
+import com.wyl.doctor.LogType;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 /**
  * 创建人   ：yuelinwang
@@ -35,6 +38,9 @@ public class SocketHelper {
      */
     public boolean write(byte[] bytes) {
         if (bytes == null) return false;
+        if (socket == null) {
+            socket = new Socket();
+        }
         if (!socket.isConnected()) {
             tryConnect();
         }
@@ -42,12 +48,25 @@ public class SocketHelper {
             Log.e(TAG, "write: 不能写入数据，socket建立连接失败");
             return false;
         }
+        Log.d(TAG, "SocketHelper--write: 开始往socket写数据");
         try {
-            os.write(bytes);
+
+            ByteBuffer buffer = ByteBuffer.allocate(4 + 4 + bytes.length);
+            //写入数据的类型
+            buffer.putInt(LogType.ALL_PATH);
+            //写入数据的大小
+            buffer.putInt(bytes.length);
+            //写入数据
+            buffer.put(bytes);
+            //写入到socket
+            os.write(buffer.array());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d(TAG, "SocketHelper--write: 写入失败");
+            release();
             return false;
         }
+        Log.d(TAG, "SocketHelper--write: 写入成功");
         return true;
     }
 
