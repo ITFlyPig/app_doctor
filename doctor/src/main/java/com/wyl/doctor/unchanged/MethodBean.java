@@ -1,11 +1,7 @@
-package com.wyl.doctor;
-
-import android.util.TimeUtils;
+package com.wyl.doctor.unchanged;
 
 import androidx.annotation.NonNull;
 
-import com.wyl.doctor.bean.BaseLogBean;
-import com.wyl.doctor.method.ThreadInfo;
 import com.wyl.doctor.utils.TimeUtil;
 
 import java.io.Serializable;
@@ -17,6 +13,7 @@ import java.util.List;
  * desc   : 方法信息
  */
 public class MethodBean extends BaseLogBean implements Serializable {
+    private static final long serialVersionUID = 1L;
     public String name;//方法名字
     public Object[] args;//方法的参数
     public String classFullName;//所属的类：全类名

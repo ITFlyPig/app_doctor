@@ -1,5 +1,7 @@
 package com.wyl.doctor.method;
 
+import com.wyl.doctor.unchanged.ThreadInfo;
+
 import java.util.HashMap;
 
 /**

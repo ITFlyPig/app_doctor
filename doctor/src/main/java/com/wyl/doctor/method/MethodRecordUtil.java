@@ -1,7 +1,8 @@
 package com.wyl.doctor.method;
 
 import com.wyl.doctor.LogType;
-import com.wyl.doctor.MethodBean;
+import com.wyl.doctor.unchanged.MethodBean;
+import com.wyl.doctor.unchanged.ThreadInfo;
 
 /**
  * 创建人   ：yuelinwang

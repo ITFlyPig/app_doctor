@@ -1,7 +1,5 @@
 package com.wyl.doctor.upload;
 
-import java.io.File;
-
 /**
  * 创建人   ：yuelinwang
  * 创建时间 ：2020/5/27

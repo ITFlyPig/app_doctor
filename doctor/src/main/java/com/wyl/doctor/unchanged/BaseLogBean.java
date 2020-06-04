@@ -1,4 +1,4 @@
-package com.wyl.doctor.bean;
+package com.wyl.doctor.unchanged;
 
 import java.io.Serializable;
 

@@ -1,7 +1,5 @@
 package com.wyl.doctor.file;
 
-import android.content.IntentFilter;
-
 import com.wyl.doctor.FileUtils;
 import com.wyl.doctor.LogType;
 import com.wyl.doctor.upload.UploadBean;

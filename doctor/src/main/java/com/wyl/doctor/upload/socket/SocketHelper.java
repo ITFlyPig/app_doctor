@@ -22,21 +22,38 @@ public class SocketHelper {
     private Socket socket;
     private OutputStream os;
     private static final int MAX_TIMES = 5;//最大重连次数
+    public static final int RETRY_WRITE_TIME = 3;//写重试次数
     private int count = 0;
+    private int curRetryWriteTime = 0;
 
     public SocketHelper(int port, String host) {
         this.port = port;
         this.host = host;
-        socket = new Socket();
+    }
+
+    /**
+     * 具有重试的写入操作
+     * @param bytes
+     * @return
+     */
+    public boolean tryWrite(byte[] bytes, int type) {
+        boolean ret = false;
+        while (!(ret = write(bytes, type)) && curRetryWriteTime < RETRY_WRITE_TIME) {
+            curRetryWriteTime++;
+        }
+        curRetryWriteTime = 0;
+        return ret;
+
     }
 
     /**
      * socket写入数据
      *
      * @param bytes
+     * @param type 数据的类型  必须的，不然后端不能识别
      * @return
      */
-    public boolean write(byte[] bytes) {
+    private boolean write(byte[] bytes, int type) {
         if (bytes == null) return false;
         if (socket == null) {
             socket = new Socket();
@@ -53,7 +70,7 @@ public class SocketHelper {
 
             ByteBuffer buffer = ByteBuffer.allocate(4 + 4 + bytes.length);
             //写入数据的类型
-            buffer.putInt(LogType.ALL_PATH);
+            buffer.putInt(type);
             //写入数据的大小
             buffer.putInt(bytes.length);
             //写入数据
@@ -79,6 +96,7 @@ public class SocketHelper {
             try {
                 socket.connect(new InetSocketAddress(host, port));
                 os = socket.getOutputStream();
+                Log.d(TAG, "SocketHelper--tryConnect: socket连接成功");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -93,6 +111,7 @@ public class SocketHelper {
     public void release() {
         if (socket != null) {
 
+            Log.d(TAG, "SocketHelper--release: 释放socket资源");
             try {
                 socket.close();
             } catch (IOException e) {

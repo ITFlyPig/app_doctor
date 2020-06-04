@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.wyl.doctor.BeansCache;
 import com.wyl.doctor.LogType;
-import com.wyl.doctor.MethodBean;
+import com.wyl.doctor.unchanged.MethodBean;
 import com.wyl.doctor.upload.UploadBean;
 import com.wyl.doctor.upload.UploadUtil;
 
@@ -53,7 +53,7 @@ public class HandleStackHelper {
                     if (bean.type == LogType.ALL_PATH) {
                         //直接使用socket传输的日志
                         Log.d(TAG, "HandleStackHelper--handle: 出栈，取到ALL_PATH类型的记录");
-                        UploadUtil.socketUploadNow(new UploadBean(bean));
+                        UploadUtil.socketUploadNow(new UploadBean(LogType.ALL_PATH ,bean));
                     } else {
                         //需要写入到文件的日志
                         BeansCache.put(bean);

@@ -2,10 +2,9 @@ package com.wyl.doctor;
 
 import android.util.Log;
 
-import com.wyl.doctor.bean.BaseLogBean;
+import com.wyl.doctor.unchanged.BaseLogBean;
 import com.wyl.doctor.file.LogManager;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**

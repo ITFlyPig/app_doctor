@@ -3,17 +3,11 @@ package com.wyl.appdoctor;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.wyl.doctor.AppDoctor;
-import com.wyl.doctor.BeansCache;
-import com.wyl.doctor.MethodBean;
 import com.wyl.doctor.ThreadHelper;
 import com.wyl.doctor.method.MethodRecordUtil;
-import com.wyl.doctor.utils.OkhttpHelper;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
     private int count = 1;
@@ -31,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
 //                count++;
 //                test1("时间：" + System.currentTimeMillis(), count);
 //                uploadTest();
-//                makeMethodTest();
-                test1("name:"  , 1);
+                makeMethodTest();
+//                test1("name:"  , 1);
             }
         });
 
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void test1(String name, int age) {
         Object[] args = new Object[]{name, age};
-        MethodRecordUtil.onStart(this.getClass(), "test1", args);
+        MethodRecordUtil.onStart(this.getClass(), "test1" + name, args);
         for (int i = 0; i < 1000; i++) {
             i++;
         }
@@ -63,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 for (int i = 0; i < 100000; i++) {
                     test1("name:" + i , 1);
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();

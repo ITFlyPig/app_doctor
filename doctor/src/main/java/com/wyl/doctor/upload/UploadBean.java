@@ -1,6 +1,6 @@
 package com.wyl.doctor.upload;
 
-import com.wyl.doctor.bean.BaseLogBean;
+import com.wyl.doctor.unchanged.BaseLogBean;
 
 import java.io.File;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class UploadBean implements Serializable {
     public File file;//待上传的文件
-    public int type;//文件的类型
+    public int type;//数据类型
 
     public BaseLogBean logBean;
 
@@ -22,7 +22,8 @@ public class UploadBean implements Serializable {
         this.type = type;
     }
 
-    public UploadBean(BaseLogBean logBean) {
+    public UploadBean(int type, BaseLogBean logBean) {
+        this.type = type;
         this.logBean = logBean;
     }
 }
