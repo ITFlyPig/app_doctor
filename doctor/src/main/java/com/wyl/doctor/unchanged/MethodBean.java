@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class MethodBean extends BaseLogBean implements Serializable {
     private static final long serialVersionUID = 1L;
-    public String name;//方法名字
+    public String methodName;//方法名字
     public Object[] args;//方法的参数
     public String classFullName;//所属的类：全类名
     public long startTime;//开始调用的时间
@@ -30,7 +30,7 @@ public class MethodBean extends BaseLogBean implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "[name = " + name + "] " +
+        return "[name = " + methodName + "] " +
                 "[classFullName = " + classFullName + "] " +
                 "[startTime = " + TimeUtil.getDate(startTime) + "] " +
                 "[endTime = " + TimeUtil.getDate(endTime) + "] " +

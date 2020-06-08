@@ -10,7 +10,7 @@ import com.wyl.doctor.unchanged.ThreadInfo;
  * 描述     ：记录方法的开始和结束；方法的开始和结束必须成对出现，不然统计不准确。
  */
 public class MethodRecordUtil {
-    private static HandleStackHelper stackHelper = new HandleStackHelper();
+    private static StackCacheHelper stackHelper = new StackCacheHelper();
 
     /**
      * 方法开始
@@ -29,7 +29,7 @@ public class MethodRecordUtil {
         //记录所属类
         methodBean.classFullName = cls.getName();
         //记录方法名称
-        methodBean.name = methodName;
+        methodBean.methodName = methodName;
         //记录方法的参数
         methodBean.args = args;
         //记录开始时间

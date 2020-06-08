@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.alibaba.fastjson.JSON;
 import com.wyl.doctor.BeansCache;
 import com.wyl.doctor.LogType;
 import com.wyl.doctor.unchanged.MethodBean;
@@ -18,14 +19,14 @@ import com.wyl.doctor.upload.UploadUtil;
  * 创建时间 ：2020/5/26
  * 描述     ：栈处理线程，主要是负责压栈和出栈，尽最大力减轻主线程的负担
  */
-public class HandleStackHelper {
+public class StackCacheHelper {
     public static final String TAG = "wyl";
     private HandlerThread mHandlerThread;
     private Handler mHandler;
     private static final int MSG_PUSH = 1;//压栈
     private static final int MSG_POP = 2;//出栈
 
-    public HandleStackHelper() {
+    public StackCacheHelper() {
         mHandlerThread = new HandlerThread("handle_stack_" + System.currentTimeMillis());
         mHandlerThread.start();
         mHandler = new Handler(mHandlerThread.getLooper()){
@@ -49,6 +50,8 @@ public class HandleStackHelper {
                     long threadId = (long) msg.obj;
                     //得到一个方法的调用信息
                     MethodBean bean = MethodRecordStack.getInstance().pop(threadId);
+                    if (bean == null) return;
+                    Log.d(TAG, "HandleStackHelper--handle: json数据：" + JSON.toJSONString(bean));
                     //将其放到内存缓存中
                     if (bean.type == LogType.ALL_PATH) {
                         //直接使用socket传输的日志
@@ -58,7 +61,6 @@ public class HandleStackHelper {
                         //需要写入到文件的日志
                         BeansCache.put(bean);
                     }
-
 
                 }
                 break;

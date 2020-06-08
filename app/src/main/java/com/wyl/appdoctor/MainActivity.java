@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 //                count++;
 //                test1("时间：" + System.currentTimeMillis(), count);
 //                uploadTest();
-                makeMethodTest();
+                test1("haha", 20);
 //                test1("name:"  , 1);
             }
         });
@@ -35,10 +35,33 @@ public class MainActivity extends AppCompatActivity {
     private void test1(String name, int age) {
         Object[] args = new Object[]{name, age};
         MethodRecordUtil.onStart(this.getClass(), "test1" + name, args);
-        for (int i = 0; i < 1000; i++) {
-            i++;
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        test2();
+        MethodRecordUtil.onEnd();
+    }
 
+    private void test2() {
+        MethodRecordUtil.onStart(this.getClass(), "test2", null);
+        test3();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        MethodRecordUtil.onEnd();
+    }
+
+    private void test3() {
+        MethodRecordUtil.onStart(this.getClass(), "test3", null);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         MethodRecordUtil.onEnd();
     }
 
@@ -56,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 for (int i = 0; i < 100000; i++) {
-                    test1("name:" + i , 1);
+                    test1("name:" + i, 1);
                     try {
                         Thread.sleep(1);
                     } catch (InterruptedException e) {

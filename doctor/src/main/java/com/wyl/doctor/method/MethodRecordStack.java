@@ -34,13 +34,13 @@ public class MethodRecordStack {
 
     /**
      * 将方法信息入栈
-     * @param bean
+     * @param newCall
      */
-    public void push(MethodBean bean) {
-        if (bean == null || bean.threadInfo == null) {
+    public void push(MethodBean newCall) {
+        if (newCall == null || newCall.threadInfo == null) {
             return;
         }
-        long threadId = bean.threadInfo.id;
+        long threadId = newCall.threadInfo.id;
 
         //据线程的id获取对应的栈
         Deque<MethodBean> stack = stackMap.get(threadId);
@@ -48,8 +48,21 @@ public class MethodRecordStack {
             stack = new LinkedList<>();
             stackMap.put(threadId, stack);
         }
+
+        //建立方法调用中的父子关系
+        if (!stack.isEmpty()) {
+            MethodBean parentCall = stack.peek();
+            if (parentCall != null) {
+                if (parentCall.childs == null) {
+                    parentCall.childs = new ArrayList<>();
+                }
+                parentCall.childs.add(newCall);
+                newCall.parent = parentCall;
+            }
+        }
+
         //将方法信息入栈
-        stack.push(bean);
+        stack.push(newCall);
     }
 
     /**
@@ -65,20 +78,13 @@ public class MethodRecordStack {
         if (bean != null) {
             //记录结束时间
             bean.endTime = System.currentTimeMillis();
-            if (stack.size() > 0) {
-                //记录当前方法的父方法
-                MethodBean parent = stack.getLast();
-                if (parent != null) {
-                    if (parent.childs == null) {
-                        parent.childs = new ArrayList<>();
-                    }
-                    //将当前方法添加到父方法的childs列表中
-                    parent.childs.add(bean);
-                }
-
-            }
         }
-        return bean;
+
+        //一个完整的方法片段
+        if (stack.isEmpty()) {
+            return bean;
+        }
+        return null;
     }
 
 }
