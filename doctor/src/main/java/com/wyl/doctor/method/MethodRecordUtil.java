@@ -14,12 +14,12 @@ public class MethodRecordUtil {
 
     /**
      * 方法开始
-     * @param cls
+     * @param classFullName
      * @param methodName
      * @param args
      */
-    public static void onStart(Class cls, String methodName, Object[] args) {
-        if (cls == null || methodName == null) {
+    public static void onStart(String classFullName, String methodName, Object[] args) {
+        if (classFullName == null || methodName == null) {
             return;
         }
 
@@ -27,7 +27,7 @@ public class MethodRecordUtil {
         MethodBean methodBean = new MethodBean();
         methodBean.type = LogType.ALL_PATH;
         //记录所属类
-        methodBean.classFullName = cls.getName();
+        methodBean.classFullName = classFullName;
         //记录方法名称
         methodBean.methodName = methodName;
         //记录方法的参数
@@ -41,6 +41,11 @@ public class MethodRecordUtil {
 
         //压栈
         stackHelper.sendPush(methodBean);
+    }
+
+    public static void onStart(String classFullName, String methodName) {
+        onStart(classFullName, methodName, null);
+
     }
 
     /**
