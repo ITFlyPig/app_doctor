@@ -1,5 +1,8 @@
 package com.wyl.doctor.method;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.wyl.doctor.unchanged.MethodBean;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import java.util.Map;
  * 描述     ：使用栈的方式记录方法块
  */
 public class MethodRecordStack {
+    public static final String TAG = MethodRecordStack.class.getName();
     ///////////构造单例///////////////
     private static MethodRecordStack instance = Holder.methodRecordStack;
 
@@ -66,18 +70,38 @@ public class MethodRecordStack {
     }
 
     /**
-     * 方法出栈
+     * 查看栈顶的数据
+     * @param threadId
      * @return
      */
-    public MethodBean pop(long threadId) {
+    public MethodBean peek(long threadId) {
         Deque<MethodBean> stack = stackMap.get(threadId);
-        if (stack == null) {
+        if (stack == null || stack.isEmpty()) {
             return null;
         }
-        MethodBean bean = stack.pop();
-        if (bean != null) {
+        return stack.peek();
+    }
+
+
+    /**
+     * 方法出栈，校验通过之后才出栈
+     * @return
+     */
+    public MethodBean pop(long threadId, String classFullName, String methodName, String methodSignature) {
+        Deque<MethodBean> stack = stackMap.get(threadId);
+        if (stack == null || stack.isEmpty()) {
+            return null;
+        }
+        MethodBean bean = stack.peek();
+        if (bean == null) return null;
+        //校验是否是需要出栈的方法
+        if (TextUtils.equals(bean.classFullName, classFullName) && TextUtils.equals(bean.methodName, methodName) && TextUtils.equals(bean.methodSignature, methodSignature)) {
+            bean = stack.pop();
             //记录结束时间
             bean.endTime = System.currentTimeMillis();
+            Log.d(TAG, "tttttt--pop: 出栈" + bean.classFullName + ":" + bean.methodName + ":" + bean.methodSignature);
+        } else {
+            bean = null;
         }
 
         //一个完整的方法片段
@@ -85,6 +109,21 @@ public class MethodRecordStack {
             return bean;
         }
         return null;
+    }
+
+    /**
+     * 当前线程的调用栈栈顶是否是android系统代码
+     * @return
+     */
+    public boolean isTopAndroidLib(long threadId) {
+        Deque<MethodBean> stack = stackMap.get(threadId);
+        if (stack != null) {
+            MethodBean bean = stack.peek();
+            if (bean != null && !TextUtils.isEmpty(bean.classFullName) && (bean.classFullName.startsWith("android") ||bean.classFullName.startsWith("androidx"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

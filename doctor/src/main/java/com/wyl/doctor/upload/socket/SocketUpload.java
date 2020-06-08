@@ -29,9 +29,9 @@ public class SocketUpload implements IUpload {
             public void handleMessage(@NonNull Message msg) {
                 //使用socket发送
                 UploadBean bean = (UploadBean) msg.obj;
-                if (bean.logBean != null) {
-                    socketHelper.tryWrite(FileUtils.toByte(bean.logBean), bean.type);
-                }
+//                if (bean.logBean != null) {
+//                    socketHelper.tryWrite(FileUtils.toByte(bean.logBean), bean.type);
+//                }
 
             }
         };

@@ -1,5 +1,7 @@
 package com.wyl.doctor.method;
 
+import android.util.Log;
+
 import com.wyl.doctor.LogType;
 import com.wyl.doctor.unchanged.MethodBean;
 import com.wyl.doctor.unchanged.ThreadInfo;
@@ -10,6 +12,7 @@ import com.wyl.doctor.unchanged.ThreadInfo;
  * 描述     ：记录方法的开始和结束；方法的开始和结束必须成对出现，不然统计不准确。
  */
 public class MethodRecordUtil {
+    public static final String TAG = MethodRecordUtil.class.getName();
     private static StackCacheHelper stackHelper = new StackCacheHelper();
 
     /**
@@ -18,10 +21,12 @@ public class MethodRecordUtil {
      * @param methodName
      * @param args
      */
-    public static void onStart(String classFullName, String methodName, Object[] args) {
+    public static void onStart(String classFullName, String methodName, String methodSignature, Object[] args) {
         if (classFullName == null || methodName == null) {
             return;
         }
+
+        Log.d(TAG, "MethodRecordUtil--onStart: " + classFullName + ":" + methodName);
 
         //记录方法的相关信息
         MethodBean methodBean = new MethodBean();
@@ -34,6 +39,7 @@ public class MethodRecordUtil {
         methodBean.args = args;
         //记录开始时间
         methodBean.startTime = System.currentTimeMillis();
+        methodBean.methodSignature = methodSignature;
         //记录方法所属线程信息
         Thread curThread = Thread.currentThread();
         ThreadInfo info = ThreadCache.getThreadInfo(curThread.getId(), curThread.getName());
@@ -43,8 +49,8 @@ public class MethodRecordUtil {
         stackHelper.sendPush(methodBean);
     }
 
-    public static void onStart(String classFullName, String methodName) {
-        onStart(classFullName, methodName, null);
+    public static void onStart(String classFullName, String methodName, String methodSignature) {
+        onStart(classFullName, methodName, methodSignature, null);
 
     }
 
@@ -66,8 +72,14 @@ public class MethodRecordUtil {
     /**
      * 方法的结束会调用
      */
-    public static void onEnd() {
+    public static void onEnd(String classFullName, String methodName, String methodSignature) {
+        Log.d(TAG, "MethodRecordUtil--onEnd: " + classFullName + ":" + methodName);
         Thread curThread = Thread.currentThread();
-        stackHelper.sendPop(curThread.getId());
+        MethodBean endCall = new MethodBean();
+        endCall.classFullName = classFullName;
+        endCall.methodName = methodName;
+        endCall.methodSignature = methodSignature;
+        endCall.threadInfo = new ThreadInfo(curThread.getName(), curThread.getId());
+        stackHelper.sendPop(endCall);
     }
 }

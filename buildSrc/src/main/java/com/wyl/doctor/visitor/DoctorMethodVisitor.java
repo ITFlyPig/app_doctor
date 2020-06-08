@@ -34,14 +34,16 @@ public class DoctorMethodVisitor extends AdviceAdapter {
         mv.visitLdcInsn(classFullName);
         //将方法名加载到操作数栈
         mv.visitLdcInsn(methodName);
+        //将签名描述加载到方法栈
+        mv.visitLdcInsn(methodDesc);
 
         int len = paramTypes == null ? 0 : paramTypes.length;
         if (len > 0) {
             //创建一个Object数组，将方法的参数放到数组中
             loadArgArray();
-            mv.visitMethodInsn(INVOKESTATIC, "com/wyl/doctor/method/MethodRecordUtil", "onStart", "(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "com/wyl/doctor/method/MethodRecordUtil", "onStart", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V", false);
         } else {
-            mv.visitMethodInsn(INVOKESTATIC, "com/wyl/doctor/method/MethodRecordUtil", "onStart", "(Ljava/lang/String;Ljava/lang/String;)V", false);
+            mv.visitMethodInsn(INVOKESTATIC, "com/wyl/doctor/method/MethodRecordUtil", "onStart", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", false);
         }
 
     }
@@ -52,6 +54,13 @@ public class DoctorMethodVisitor extends AdviceAdapter {
         if (classFullName == null) {
             classFullName = "";
         }
-        mv.visitMethodInsn(INVOKESTATIC, "com/wy/.doctor/method/MethodRecordUtil", "onEnd", "()V", false);
+        //将类名加载到操作数栈
+        mv.visitLdcInsn(classFullName);
+        //将方法名加载到操作数栈
+        mv.visitLdcInsn(methodName);
+        //将签名描述加载到方法栈
+        mv.visitLdcInsn(methodDesc);
+
+        mv.visitMethodInsn(INVOKESTATIC, "com/wyl/doctor/method/MethodRecordUtil", "onEnd", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", false);
     }
 }

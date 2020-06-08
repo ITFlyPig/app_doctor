@@ -48,7 +48,19 @@ public class DoctorTransform extends BaseTransform {
 
     @Override
     protected boolean classFilter(String classPath) {
+        String path = classPath.replaceAll("/", ".");
+        boolean isFilter = true;
+        for (String includePage : includePages) {
+            if (path.startsWith(includePage)) {
+                isFilter =  false;
+                break;
+            }
+        }
+
         //避免循环引用
-        return classPath.contains("MethodRecordUtil");
+        return isFilter;
     }
+
+    //需要处理的包
+    private static final String[] includePages = new String[]{"com.wyl.appdoctor", "android", "androidx"};
 }

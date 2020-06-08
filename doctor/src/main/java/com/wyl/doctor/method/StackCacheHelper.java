@@ -46,28 +46,30 @@ public class StackCacheHelper {
     private void handle(Message msg) {
         switch (msg.what) {
             case MSG_POP:
-                if (msg.obj instanceof Long) {
-                    long threadId = (long) msg.obj;
-                    //得到一个方法的调用信息
-                    MethodBean bean = MethodRecordStack.getInstance().pop(threadId);
-                    if (bean == null) return;
-                    Log.d(TAG, "HandleStackHelper--handle: json数据：" + JSON.toJSONString(bean));
+                if (msg.obj instanceof MethodBean) {
+                    MethodBean bean = (MethodBean) msg.obj;
+                    if (bean.threadInfo == null) return;
+                    MethodBean topBean = MethodRecordStack.getInstance().pop(bean.threadInfo.id, bean.classFullName, bean.methodName, bean.methodSignature);
+                    if (topBean == null) return;
+//                    Log.d(TAG, "HandleStackHelper--handle: json数据：" + JSON.toJSONString(bean));
                     //将其放到内存缓存中
-                    if (bean.type == LogType.ALL_PATH) {
+                    if (topBean.type == LogType.ALL_PATH) {
                         //直接使用socket传输的日志
                         Log.d(TAG, "HandleStackHelper--handle: 出栈，取到ALL_PATH类型的记录");
-                        UploadUtil.socketUploadNow(new UploadBean(LogType.ALL_PATH ,bean));
+                        UploadUtil.socketUploadNow(new UploadBean(LogType.ALL_PATH ,topBean));
                     } else {
                         //需要写入到文件的日志
-                        BeansCache.put(bean);
+                        BeansCache.put(topBean);
                     }
 
                 }
                 break;
             case MSG_PUSH:
-                if (msg.obj instanceof MethodBean) {
 
+                if (msg.obj instanceof MethodBean) {
                     MethodBean bean = (MethodBean) msg.obj;
+                    if (MethodRecordStack.getInstance().isTopAndroidLib(bean.threadInfo.id)) return;
+                    Log.d(TAG, "tttttt--handle: 入栈：" + bean.classFullName + ":" + bean.methodName + ":" + bean.methodSignature);
                     MethodRecordStack.getInstance().push(bean);
                 }
                 break;
@@ -90,14 +92,15 @@ public class StackCacheHelper {
 
     /**
      * 发送出栈命令
-     * @param threadId
+     * @param endCall
      */
-    public void sendPop(long threadId) {
+    public void sendPop(MethodBean endCall) {
         Message msg = Message.obtain();
         msg.what = MSG_POP;
-        msg.obj = threadId;
+        msg.obj = endCall;
         mHandler.sendMessage(msg);
     }
+
 
 
 }

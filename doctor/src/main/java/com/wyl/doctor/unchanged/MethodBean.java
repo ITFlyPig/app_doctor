@@ -19,6 +19,7 @@ public class MethodBean extends BaseLogBean implements Serializable {
     public String classFullName;//所属的类：全类名
     public long startTime;//开始调用的时间
     public long endTime;//结束调用的时间
+    public String methodSignature;//方法的签名
 
 
     //下面的表示父子关系
