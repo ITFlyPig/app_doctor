@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 //                uploadTest();
 //                test1("haha", 20);
 //                test1("name:"  , 1);
+                test1("wang", 2);
             }
         });
 
@@ -34,17 +35,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void test1(String name, int age) {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(3);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         test2();
+        test3();
     }
 
     private void test2() {
-        test3();
+
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void test3() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

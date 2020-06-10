@@ -36,7 +36,7 @@ public class MethodRecordUtil {
         //记录方法名称
         methodBean.methodName = methodName;
         //记录方法的参数
-        methodBean.args = args;
+//        methodBean.args = args;
         //记录开始时间
         methodBean.startTime = System.currentTimeMillis();
         methodBean.methodSignature = methodSignature;
@@ -79,6 +79,7 @@ public class MethodRecordUtil {
         endCall.classFullName = classFullName;
         endCall.methodName = methodName;
         endCall.methodSignature = methodSignature;
+        endCall.endTime = System.currentTimeMillis();
         endCall.threadInfo = new ThreadInfo(curThread.getName(), curThread.getId());
         stackHelper.sendPop(endCall);
     }

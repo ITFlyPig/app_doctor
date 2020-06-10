@@ -49,9 +49,10 @@ public class StackCacheHelper {
                 if (msg.obj instanceof MethodBean) {
                     MethodBean bean = (MethodBean) msg.obj;
                     if (bean.threadInfo == null) return;
-                    MethodBean topBean = MethodRecordStack.getInstance().pop(bean.threadInfo.id, bean.classFullName, bean.methodName, bean.methodSignature);
+                    MethodBean topBean = MethodRecordStack.getInstance().pop(bean.threadInfo.id, bean.classFullName, bean.methodName, bean.methodSignature, bean.endTime);
                     if (topBean == null) return;
 //                    Log.d(TAG, "HandleStackHelper--handle: json数据：" + JSON.toJSONString(bean));
+                    Log.d(TAG, "endtime--handle: 结束时间：" + bean.endTime);
                     //将其放到内存缓存中
                     if (topBean.type == LogType.ALL_PATH) {
                         //直接使用socket传输的日志

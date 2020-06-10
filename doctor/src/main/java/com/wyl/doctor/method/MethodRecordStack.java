@@ -87,7 +87,7 @@ public class MethodRecordStack {
      * 方法出栈，校验通过之后才出栈
      * @return
      */
-    public MethodBean pop(long threadId, String classFullName, String methodName, String methodSignature) {
+    public MethodBean pop(long threadId, String classFullName, String methodName, String methodSignature, long endTime) {
         Deque<MethodBean> stack = stackMap.get(threadId);
         if (stack == null || stack.isEmpty()) {
             return null;
@@ -97,8 +97,8 @@ public class MethodRecordStack {
         //校验是否是需要出栈的方法
         if (TextUtils.equals(bean.classFullName, classFullName) && TextUtils.equals(bean.methodName, methodName) && TextUtils.equals(bean.methodSignature, methodSignature)) {
             bean = stack.pop();
+            bean.endTime = endTime;
             //记录结束时间
-            bean.endTime = System.currentTimeMillis();
             Log.d(TAG, "tttttt--pop: 出栈" + bean.classFullName + ":" + bean.methodName + ":" + bean.methodSignature);
         } else {
             bean = null;

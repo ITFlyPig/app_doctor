@@ -51,16 +51,17 @@ public class DoctorTransform extends BaseTransform {
         String path = classPath.replaceAll("/", ".");
         boolean isFilter = true;
         for (String includePage : includePages) {
-            if (path.startsWith(includePage)) {
+            if (path.contains(includePage)) {
                 isFilter =  false;
                 break;
             }
         }
 
+        System.out.println("文件：" + classPath + "----是否过滤：" + isFilter);
         //避免循环引用
         return isFilter;
     }
 
     //需要处理的包
-    private static final String[] includePages = new String[]{"com.wyl.appdoctor", "android", "androidx"};
+    private static final String[] includePages = new String[]{"com.wyl.appdoctor"};
 }
